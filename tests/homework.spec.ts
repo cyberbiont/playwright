@@ -60,7 +60,8 @@ test.describe('Playwright page', () => {
 
 			await link.click();
 
-			expect(page.url()).toBe('https://playwright.dev/docs/intro');
+			await expect(page).toHaveURL('https://playwright.dev/docs/intro');
+			// expect(page.url()).toBe('https://playwright.dev/docs/intro'); // also possible
 		});
 	});
 

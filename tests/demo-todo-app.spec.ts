@@ -104,8 +104,6 @@ test.describe('Mark all as completed', () => {
 
 		// Should be no completed classes.
 		await expect(page.getByTestId('todo-item')).toHaveClass(['', '', '']);
-
-		// NB this test is not very reliable, we can decide to add another class to the item later
 	});
 
 	test('complete all checkbox should update state when items are completed / cleared', async ({
