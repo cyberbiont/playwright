@@ -1,7 +1,5 @@
 import { Locator, expect, test } from '@playwright/test';
 
-import { beforeEach } from 'node:test';
-
 /* Task:
 
 create new test file

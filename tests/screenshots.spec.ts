@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('example test', async ({ page }) => {
+test('matches screenshot', async ({ page }) => {
 	await page.goto('https://playwright.dev');
 
 	await expect(page).toHaveScreenshot();
