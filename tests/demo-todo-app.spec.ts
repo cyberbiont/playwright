@@ -12,6 +12,8 @@ const TODO_ITEMS = [
 
 test.describe('New Todo', () => {
 	test('should allow me to add todo items', async ({ page }) => {
+		/* this description style usually used with 'it' */
+
 		// create a new todo locator
 		const newTodo = page.getByPlaceholder('What needs to be done?');
 
@@ -21,6 +23,18 @@ test.describe('New Todo', () => {
 
 		// Make sure the list only has one todo item.
 		await expect(page.getByTestId('todo-title')).toHaveText([TODO_ITEMS[0]]);
+
+		/*
+		The suggested locator will depend on the following factors:
+
+    Accessibility Priority:
+        Playwright typically prefers accessible attributes like label text, as these provide clear context for testing (they reflect what a user would see and interact with on the screen).
+        If 'but some cheese' is the accessible label (e.g., set with an <label for="id">), then getByLabelText('but some cheese') would likely be suggested.
+
+    data-testid Attribute:
+        If the label is not accessible (for instance, it’s not linked to the element via standard HTML for attributes), then getByTestId('todo-title') may be suggested instead. The data-testid attribute is often used as a reliable selector for testing purposes, especially when accessibility attributes aren’t available.
+
+		So, if the label text is accessible, Playwright will likely suggest page.getByLabelText('but some cheese'). If not, it will fall back to page.getByTestId('todo-title'), as data-testid provides a stable and unique identifier for the element. */
 
 		// Create 2nd todo.
 		await newTodo.fill(TODO_ITEMS[1]);
@@ -67,6 +81,8 @@ test.describe('New Todo', () => {
 
 		// Check all items in one call.
 		await expect(page.getByTestId('todo-title')).toHaveText(TODO_ITEMS);
+		/* we will have 3 elements each todo has data-testid="todo-count" */
+
 		await checkNumberOfTodosInLocalStorage(page, 3);
 	});
 });
@@ -97,13 +113,14 @@ test.describe('Mark all as completed', () => {
 	test('should allow me to clear the complete state of all items', async ({
 		page,
 	}) => {
-		const toggleAll = page.getByLabel('Mark all as complete');
+		const toggleAll = page.getByLabel('Mark all as complete'); // $toggleAllBtn
 		// Check and then immediately uncheck.
 		await toggleAll.check();
 		await toggleAll.uncheck();
 
 		// Should be no completed classes.
 		await expect(page.getByTestId('todo-item')).toHaveClass(['', '', '']);
+		// better solution ?
 	});
 
 	test('complete all checkbox should update state when items are completed / cleared', async ({
@@ -116,7 +133,7 @@ test.describe('Mark all as completed', () => {
 
 		// Uncheck first todo.
 		const firstTodo = page.getByTestId('todo-item').nth(0);
-		await firstTodo.getByRole('checkbox').uncheck();
+		await firstTodo.getByRole('checkbox').uncheck(); // drill down to the checkbox and uncheck it
 
 		// NB locators work in a scoped way, like document.querySelector, if we call locator method on existing locator, it will search onl the children
 
@@ -398,6 +415,7 @@ test.describe('Routing', () => {
 
 		await checkNumberOfCompletedTodosInLocalStorage(page, 1);
 
+		/* good article about test.step usage https://timdeschryver.dev/blog/keep-your-playwright-tests-structured-with-steps#code-comments */
 		await test.step('Showing all items', async () => {
 			await page.getByRole('link', { name: 'All' }).click();
 			await expect(todoItem).toHaveCount(3);
@@ -463,10 +481,12 @@ async function createDefaultTodos(page: Page) {
 	}
 }
 
+/* In Playwright, the waitForFunction method has a default timeout of 30 seconds (30,000 milliseconds). This timeout represents the maximum amount of time that Playwright will wait for the function to return a truthy value. */
+// goof article about waitForFunction usgae and handling asyncronisity:  https://medium.com/@mikestopcontinues/manage-delays-and-async-in-playwright-616663f62043
 async function checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
 	return await page.waitForFunction((e) => {
 		return JSON.parse(localStorage['react-todos']).length === e;
-	}, expected);
+	}, expected /* { timeout: 5000 } */);
 }
 
 async function checkNumberOfCompletedTodosInLocalStorage(

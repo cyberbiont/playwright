@@ -26,13 +26,24 @@ test.describe('Playwright page', () => {
 				'Fast and reliable end-to-end testing for modern web apps | Playwright'
 			);
 		});
+
+		test('has dark mode button', async ({ page }) => {
+			const button = page.getByLabel('Switch between dark and light');
+			expect(button).toBeDefined();
+
+			await expect(button).toBeEnabled();
+			await expect(button).toBeVisible();
+
+			// use IDE hints about function return type: if matcher function returns a promise, you shiuld use await
+		});
 	});
 
 	test.describe('copyright', () => {
 		test('has a copyright', async ({ page }) => {
 			const copyright = page.getByText(/Copyright/);
 
-			await expect(copyright).toBeVisible();
+			await expect(copyright, 'is visible').toBeVisible();
+			await expect(copyright, 'is inside the viewport').toBeInViewport();
 		});
 
 		test('has a Microsoft brand', async ({ page }) => {
@@ -82,7 +93,10 @@ test.describe('Playwright page', () => {
 			await expect(input).toBeVisible();
 
 			// Emulate pressing the 'Escape' key
-			await page.keyboard.press('Escape');
+			await input.press('Escape'); // emulates pressing Escape on input (i.e. while input has focus), is more precise
+
+			// await input.focus();
+			// await page.keyboard.press('Escape'); // emuates pressing Escape on the whole page
 
 			await expect(input).not.toBeVisible();
 		});
