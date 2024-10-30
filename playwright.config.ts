@@ -57,8 +57,6 @@ export default defineConfig({
 		timezoneId: 'Europe/Paris',
 	},
 
-	globalSetup: require.resolve('./global-setup'),
-
 	/* Configure projects for major browsers */
 	projects: [
 		{
