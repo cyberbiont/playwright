@@ -39,6 +39,23 @@ export default defineConfig({
 
 		// video: 'on-first-retry',
 		// video: 'on',
+
+		video: {
+			mode: 'on',
+			// size: { width: 640, height: 480 },
+		},
+
+		/*
+		'off' - Do not record video.
+    'on' - Record video for each test.
+    'retain-on-failure' - Record video for each test, but remove all videos from successful test runs.
+    'on-first-retry' - Record video only when retrying a test for the first time. */
+
+		// Emulates the user locale.
+		locale: 'en-GB',
+
+		// Emulates the user timezone.
+		timezoneId: 'Europe/Paris',
 	},
 
 	/* Configure projects for major browsers */

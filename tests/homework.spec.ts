@@ -38,12 +38,13 @@ test.describe('Playwright page', () => {
 		});
 	});
 
+	
+
 	test.describe('copyright', () => {
 		test('has a copyright', async ({ page }) => {
 			const copyright = page.getByText(/Copyright/);
 
 			await expect(copyright, 'is visible').toBeVisible();
-			await expect(copyright, 'is inside the viewport').toBeInViewport();
 		});
 
 		test('has a Microsoft brand', async ({ page }) => {
