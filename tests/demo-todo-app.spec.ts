@@ -482,7 +482,7 @@ async function createDefaultTodos(page: Page) {
 }
 
 /* In Playwright, the waitForFunction method has a default timeout of 30 seconds (30,000 milliseconds). This timeout represents the maximum amount of time that Playwright will wait for the function to return a truthy value. */
-// goof article about waitForFunction usgae and handling asyncronisity:  https://medium.com/@mikestopcontinues/manage-delays-and-async-in-playwright-616663f62043
+// good article about waitForFunction usgae and handling asyncronisity:  https://medium.com/@mikestopcontinues/manage-delays-and-async-in-playwright-616663f62043
 async function checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
 	return await page.waitForFunction((e) => {
 		return JSON.parse(localStorage['react-todos']).length === e;
